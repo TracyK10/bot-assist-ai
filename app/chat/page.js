@@ -45,7 +45,7 @@ export default function ChatInterface() {
           type="text"
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
-          placeholder="Type your message here..."
+          placeholder="Ask AI..."
           className={styles.chatInput}
         />
         <button type="submit" className={styles.sendButton}>Send</button>
