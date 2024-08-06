@@ -53,7 +53,7 @@
 
 .chatInputArea {
   display: flex;
-  padding: 0.5rem;
+  padding: 1.5rem;
   border-top: 1px solid #ccc;
   border-radius: 15px;
   -webkit-border-radius: 15px;
@@ -62,6 +62,10 @@
   -o-border-radius: 15px;
   margin-right: 1rem;
   outline: none;
+  align-items: center;
+  position: sticky;
+  z-index: 1000;
+  bottom: 0;
 }
 
 .sendButton {
@@ -79,4 +83,24 @@
 
 .sendButton:hover {
   background-color: #4d4d4d;
+}
+
+/* Spinner styles */
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top: 4px solid #333;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+  margin: 1rem auto; /* Center the spinner */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
