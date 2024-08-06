@@ -28,7 +28,10 @@ export default function ChatInterface() {
   return (
     <div className={styles.chatContainer}>
       <div className={styles.chatHeader}>
-        <h1>AI Customer Support</h1>
+        <h1>Talk Data to me</h1>
+      </div>
+      <div className={styles.chatSubHeader}>
+        <p>Ask me a question to get your full support</p>
       </div>
       <div className={styles.chatMessages}>
         {messages.map((message, index) => (
@@ -37,7 +40,7 @@ export default function ChatInterface() {
           </div>
         ))}
       </div>
-      <form onSubmit={handleSendMessage} classname={styles.chatInputArea}>
+      <form onSubmit={handleSendMessage} className={styles.chatInputArea}>
         <input
           type="text"
           value={inputMessage}
