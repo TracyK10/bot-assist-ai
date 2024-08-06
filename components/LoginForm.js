@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import styles from "../styles/LoginForm.module.css";
+import { TextField, Typography, Button, Container, Box } from "@mui/material";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -25,27 +27,46 @@ export default function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto">
-      <div className="mb-4">
-        <label htmlFor="email" className="block mb-2">
-          Email
-        </label>
-        <input
-          type="email"
-          id="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="w-full px-3 pu-2 border rounded"
-        />
-      </div>
-      {error && <p className="text-red-500 mb-4">{error}</p>}
-      <button
-        type="submit"
-        className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-      >
-        Login
-      </button>
-    </form>
+    <Container className={styles.LoginContainer}>
+      <Box className={styles.loginCard}>
+        <Typography variant="h4" className={styles.loginTitle}>
+          Login
+        </Typography>
+        <form onSubmit={handleSubmit} className="{styles.loginForm}">
+          <TextField
+            label="Email"
+            type="email"
+            fullWidth
+            variant="outlined"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <TextField
+            label="Password"
+            type="password"
+            fullWidth
+            variant="outlined"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          {error && (
+            <Typography className="{styles.errorMessage}">{error}</Typography>
+          )}
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            className={styles.submitButton}
+          >
+            Login
+          </Button>
+        </form>
+        <Typography className={styles.forgotPassword}>
+          Forgot password?
+        </Typography>
+      </Box>
+    </Container>
   );
 }
