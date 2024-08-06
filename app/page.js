@@ -12,7 +12,7 @@ export default function Home() {
         </Link>
       </nav>
 
-      <main classname={styles.main}>
+      <main className={styles.main}>
         <h1 className={styles.title}>Welcome to AI Customer Support</h1>
         <p className={styles.description}>
           Revolutionize your customer support with AI-powered Platform
