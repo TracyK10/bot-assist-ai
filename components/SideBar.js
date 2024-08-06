@@ -13,7 +13,7 @@ const Sidebar = ({ chatHistory, activeChatId, OnNewChat, OnChatSelect }) => {
             key={chat.id}
             onClick={() => OnChatSelect(chat.id)}
             className={
-              `${styles.chatItem} ${activeChatId === chat.id ? styles.active : ''}`
+              `${styles.chatItem} ${chat.id === activeChatId ? styles.active : ''}`
             }
           >
             {chat.title}

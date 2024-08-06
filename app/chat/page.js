@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import styles from "@/styles/chatinterface.module.css";
-import Sidebar from "@/components/Sidebar";
+import Sidebar from "@/components/SideBar.js";
 
 export default function ChatInterface() {
   const [messages, setMessages] = useState([]);
