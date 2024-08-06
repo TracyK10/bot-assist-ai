@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { TextField, Typography, Button, Container, Box } from "@mui/material";
 import { useRouter } from "next/navigation";
 import styles from "../styles/login.module.css";
+import Link from "next/link";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -63,8 +64,8 @@ export default function LoginForm() {
             Login
           </Button>
         </form>
-        <Typography className={styles.forgotPassword}>
-          Forgot password?
+        <Typography className={styles.registerLink}>
+          Don't have an account? <Link href="/register">Register</Link>
         </Typography>
       </Box>
     </Container>

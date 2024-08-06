@@ -55,6 +55,22 @@
   text-align: center;
 }
 
+.registerLink {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.registerLink a {
+  color: #4a99e2;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.registerLink a:hover {
+  text-decoration: underline;
+}
+
 .forgotPassword {
   margin-top: 1rem;
   text-align: right;
@@ -66,6 +82,7 @@
 .forgotPassword:hover {
   color: #303f9f;
 }
+
 
 /* RESPONSIVE ADJUSTMENTS */
 @media (max-width: 600px) {
