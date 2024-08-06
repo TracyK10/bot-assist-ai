@@ -32,7 +32,7 @@ export default function LoginForm() {
         <Typography variant="h4" className={styles.loginTitle}>
           Login
         </Typography>
-        <form onSubmit={handleSubmit} className="{styles.loginForm}">
+        <form onSubmit={handleSubmit} className={styles.loginForm}>
           <TextField
             label="Email"
             type="email"
@@ -52,7 +52,7 @@ export default function LoginForm() {
             required
           />
           {error && (
-            <Typography className="{styles.errorMessage}">{error}</Typography>
+            <Typography className={styles.errorMessage}>{error}</Typography>
           )}
           <Button
             type="submit"
