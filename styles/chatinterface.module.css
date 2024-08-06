@@ -1,8 +1,13 @@
+.pageContainer {
+  display: flex;
+  height: 100vh;
+}
+
 .chatContainer {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  max-width: 500px;
+  max-width: calc(100% - 300px);
   padding: 1rem;
   margin: 0 auto;
   border: none;
