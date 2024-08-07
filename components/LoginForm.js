@@ -5,6 +5,7 @@ import { TextField, Typography, Button, Container, Box } from "@mui/material";
 import { useRouter } from "next/navigation";
 import styles from "../styles/login.module.css";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -25,6 +26,9 @@ export default function LoginForm() {
     } else {
       setError("Invalid email or password");
     }
+  };
+  const handleGoogleSignIn = () => {
+    signIn("google");
   };
 
   return (
@@ -63,6 +67,14 @@ export default function LoginForm() {
           >
             Login
           </Button>
+          <Button
+          onClick={handleGoogleSignIn}
+          variant="contained"
+          fullWidth
+          className={styles.googleButton}
+        >
+          Login with Google
+        </Button>
         </form>
         <Typography className={styles.registerLink}>
           Do not have an account? <Link href="/register">Register</Link>
