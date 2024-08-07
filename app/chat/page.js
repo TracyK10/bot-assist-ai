@@ -101,18 +101,10 @@ export default function ChatInterface() {
         </div>
         <div className={styles.chatMessages}>
           {messages.map((message, index) => (
-            <div
-              key={index}
-              className={`${styles.message} ${styles[message.sender]}`}
-            >
-              {message.text}
-            </div>
+            <React.Fragment key={index}>
+              {renderMessage(message, index)}
+            </React.Fragment>
           ))}
-          {isLoading && (
-            <div className={`${styles.message} ${styles.loading}`}>
-              Thinking...
-            </div>
-          )}
           {error && (
             <div className={`${styles.message} ${styles.error}`}>{error}</div>
           )}
