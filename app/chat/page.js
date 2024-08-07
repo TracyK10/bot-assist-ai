@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "@/styles/chatinterface.module.css";
 import Sidebar from "@/components/SideBar.js";
+import { generateResponse } from "@/utils/chatbot";
 
 export default function ChatInterface() {
   const [messages, setMessages] = useState([]);
@@ -13,22 +14,36 @@ export default function ChatInterface() {
     // More chat history
   ]);
   const [activeChat, setActiveChat] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const messagesEndRef = useRef(null);
 
-  const handleSendMessage = (e) => {
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleSendMessage = async (e) => {
     e.preventDefault();
     if (inputMessage.trim() !== "") {
-      setMessages([...messages, { text: inputMessage, sender: "user" }]);
+      const userMessage = { text: inputMessage, sender: "user" };
+      setMessages([...messages, userMessage]);
       setInputMessage("");
+      setIsLoading(true);
+      setError(null);
 
-      // Send message to AI backend
-      // then add the AI response to the messages
-
-      setTimeout(() => {
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { text: "Hello, how can I help you?", sender: "ai" },
-        ]);
-      }, 1000);
+      try {
+        const botResponse = await generateResponse(inputMessage, messages);
+        setMessages((prevMessages) => [...prevMessages, { text: botResponse, sender: "ai" }]);
+      } catch (error) {
+        console.error("Error:", error);
+        setError("Failed to get a response from the AI");
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -38,12 +53,12 @@ export default function ChatInterface() {
       ...chatHistory,
       { id: newChatId, title: `Chat ${newChatId}` },
     ]);
-    setActiveChatId(newChatId);
+    setActiveChat(newChatId);
     setMessages([]);
   };
 
   const selectChat = (chatId) => {
-    setActiveChatId(chatId);
+    setActiveChat(chatId);
     // Load chat messages from backend
     // Clear the message
     setMessages([]);
