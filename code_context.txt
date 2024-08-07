@@ -1,0 +1,969 @@
+// File: components/ChatInterface.js
+
+// File: components/LoginForm.js
+"use client";
+
+import React, { useState } from "react";
+import { TextField, Typography, Button, Container, Box } from "@mui/material";
+import { useRouter } from "next/navigation";
+import styles from "../styles/login.module.css";
+import Link from "next/link";
+
+export default function LoginForm() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const router = useRouter();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    // Make an API call to authenticate
+    // Simulating a login
+
+    if (email === "user@example.com" && password === "password") {
+      // Redirect to chat page on successful login
+      router.push("/chat");
+    } else {
+      setError("Invalid email or password");
+    }
+  };
+
+  return (
+    <Container className={styles.LoginContainer}>
+      <Box className={styles.loginCard}>
+        <Typography variant="h4" className={styles.loginTitle}>
+          Login
+        </Typography>
+        <form onSubmit={handleSubmit} className={styles.loginForm}>
+          <TextField
+            label="Email"
+            type="email"
+            fullWidth
+            variant="outlined"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <TextField
+            label="Password"
+            type="password"
+            fullWidth
+            variant="outlined"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          {error && (
+            <Typography className={styles.errorMessage}>{error}</Typography>
+          )}
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            className={styles.submitButton}
+          >
+            Login
+          </Button>
+        </form>
+        <Typography className={styles.registerLink}>
+          Do not have an account? <Link href="/register">Register</Link>
+        </Typography>
+      </Box>
+    </Container>
+  );
+}
+
+// File: components/RegisterForm.js
+"use client";
+
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import styles from "@/styles/register.module.css";
+import { TextField, Typography, Button, Box } from "@mui/material";
+
+export default function RegisterForm() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const router = useRouter();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (password !== confirmPassword) {
+      setError("Password don't match");
+      return;
+    }
+
+    // Make API call to the register user
+    // Simulate successful registration
+
+    try {
+      // Simulating an API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      console.log("Registration successful", { name, email, password });
+      router.push("/login");
+    } catch (err) {
+      setError("Registration failed. Please try again");
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className={styles.registerForm}>
+      <TextField
+        label="Full Name"
+        fullWidth
+        variant="outlined"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        required
+        margin="normal"
+      />
+      <TextField
+        label="Email"
+        type="email"
+        fullWidth
+        variant="outlined"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+        margin="normal"
+      />
+      <TextField
+        label="Password"
+        type="password"
+        fullWidth
+        variant="outlined"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+        margin="normal"
+      />
+      <TextField
+        label="Confirm Password"
+        type="password"
+        fullWidth
+        variant="outlined"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        required
+        margin="normal"
+      />
+      {error && (
+        <Typography className={styles.errorMessage}>{error}</Typography>
+      )}
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        className={styles.submitButton}
+      >
+        Register
+      </Button>
+      <Box className={styles.loginLink}>
+        <Typography>
+          Already have an account? <a href="/login">Login here</a>
+        </Typography>
+      </Box>
+    </form>
+  );
+}
+
+// File: components/SideBar.js
+import React from "react";
+import { useRouter } from "next/navigation";
+import styles from "@/styles/sidebar.module.css";
+
+const Sidebar = ({ chatHistory, activeChatId, OnNewChat, OnChatSelect }) => {
+  const router = useRouter();
+
+  const handleLogout = () => {
+    // Handle logout process
+    // Clearing the authentication token
+    console.log("Logging out...");
+    // Redirect to the homepage
+    router.push("/");
+  };
+
+  return (
+    <div className={styles.sidebar}>
+      <div className={styles.sidebarContent}>
+        <button onClick={OnNewChat} className={styles.newChatButton}>
+          New Chat
+        </button>
+        <div className={styles.chatList}>
+          {chatHistory.map((chat) => (
+            <div
+              key={chat.id}
+              onClick={() => OnChatSelect(chat.id)}
+              className={`${styles.chatItem} ${
+                chat.id === activeChatId ? styles.active : ""
+              }`}
+            >
+              {chat.title}
+            </div>
+          ))}
+        </div>
+      </div>
+      <button onClick={handleLogout} className={styles.logoutButton}>
+        Logout
+      </button>
+    </div>
+  );
+};
+
+export default Sidebar;
+
+// File: app/api/auth/[...nextauth]/route.js
+
+// File: app/api/chat/route.js
+
+// File: app/chat/page.js
+"use client";
+
+import React, { useState, useEffect, useRef } from "react";
+import styles from "@/styles/chatinterface.module.css";
+import Sidebar from "@/components/SideBar.js";
+import { generateResponse } from "@/utils/chatbot";
+import { Typography, Skeleton } from "@mui/material";
+
+export default function ChatInterface() {
+  const [messages, setMessages] = useState([]);
+  const [inputMessage, setInputMessage] = useState("");
+  const [chatHistory, setChatHistory] = useState([
+    { id: 1, title: "Previous Chat 1" },
+    { id: 2, title: "Previous Chat 2" },
+    // More chat history
+  ]);
+  const [activeChat, setActiveChat] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    if (inputMessage.trim() !== "") {
+      const userMessage = { text: inputMessage, sender: "user" };
+      setMessages([...messages, userMessage]);
+      setInputMessage("");
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const botResponse = await generateResponse(inputMessage, messages);
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { text: botResponse, sender: "ai" },
+        ]);
+      } catch (error) {
+        console.error("Error:", error);
+        setError(error.message || "Failed to get a response from the AI");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  const startNewChat = () => {
+    const newChatId = Date.now(); //Timestamp as unique id
+    setChatHistory([
+      ...chatHistory,
+      { id: newChatId, title: `Chat ${newChatId}` },
+    ]);
+    setActiveChat(newChatId);
+    setMessages([]);
+  };
+
+  const selectChat = (chatId) => {
+    setActiveChat(chatId);
+    // Load chat messages from backend
+    // Clear the message
+    setMessages([]);
+  };
+
+  const renderMessage = (message, index) => {
+    if (message.sender === "ai" && isLoading && index === messages.length - 1) {
+      return (
+        <div className={`${styles.message} ${styles.ai}`} key={index}>
+          <Typography variant="body1">
+            <Skeleton width="100%" />
+            <Skeleton width="80%" />
+            <Skeleton width="60%" />
+          </Typography>
+        </div>
+      );
+    }
+    return (
+      <div
+        className={`${styles.message} ${styles[message.sender]}`}
+        key={index}
+      >
+        {message.text}
+      </div>
+    );
+  };
+
+  return (
+    <div className={styles.pageContainer}>
+      <Sidebar
+        chatHistory={chatHistory}
+        activeChatId={activeChat}
+        OnNewChat={startNewChat}
+        OnChatSelect={selectChat}
+      />
+      <div className={styles.chatContainer}>
+        <div className={styles.chatHeader}>
+          <h1>Talk Data to me</h1>
+        </div>
+        <div className={styles.chatSubHeader}>
+          <p>Ask me a question to get your full support</p>
+        </div>
+        <div className={styles.chatMessages}>
+          {messages.map((message, index) => (
+            <React.Fragment key={index}>
+              {renderMessage(message, index)}
+            </React.Fragment>
+          ))}
+          {error && (
+            <div className={`${styles.message} ${styles.error}`}>
+              {typeof error === "string"
+                ? error
+                : error.message || "An error occurred"}
+            </div>
+          )}
+          <div ref={messagesEndRef} />
+        </div>
+        <form onSubmit={handleSendMessage} className={styles.chatInputArea}>
+          <input
+            type="text"
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+            placeholder="Ask AI..."
+            className={styles.chatInput}
+            disabled={isLoading}
+          />
+          <button
+            type="submit"
+            className={styles.sendButton}
+            disabled={isLoading}
+          >
+            Send
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+// File: app/layout.js
+import { Inter } from "next/font/google";
+import "../styles/globals.css";
+
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata = {
+  title: "AI Customer Support",
+  description: "Revolutionize your customer support with AI-powered Platform",
+};
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>
+        <main className="container mx-auto px-4 py-8">{children}</main>
+      </body>
+    </html>
+  );
+}
+
+// File: app/login/page.js
+import LoginForm from '@/components/LoginForm';
+
+export default function LoginPage() {
+  return (
+    <div className="container mx-auto mt-10">
+      <h1 className="text-3xl font-bold mb-5 text-center">Login</h1>
+      <LoginForm />
+    </div>
+  );
+}
+// File: app/page.js
+import React from "react";
+import Link from "next/link";
+import styles from '@/styles/page.module.css';
+
+export default function Home() {
+  return (
+    <div className={styles.container}>
+      <nav className={styles.nav}>
+        <div className={styles.logo}>AI Support Platform</div>
+        <Link href="/login">
+          <button className={styles.getStartedBtn}>Get Started</button>
+        </Link>
+      </nav>
+
+      <main className={styles.main}>
+        <h1 className={styles.title}>Welcome to AI Customer Support</h1>
+        <p className={styles.description}>
+          Revolutionize your customer support with AI-powered Platform
+        </p>
+        <div className={styles.features}>
+          <div className={styles.feature}>
+            <h2>24/7 Support</h2>
+            <p>Our AI never sleeps, providing round-the-clock support for your customers</p>
+          </div>
+          <div className={styles.feature}>
+            <h2>Instant Response</h2>
+            <p>Get instant responses to customer queries, no more waiting in queues</p>
+          </div>
+          <div className={styles.feature}>
+            <h2>Scalable Solution</h2>
+            <p>Handle thousands of inquiries simultaneously without compromising quality</p>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+// File: app/register/page.js
+import RegisterForm from '@/components/RegisterForm';
+import { Container, Box, Typography } from "@mui/material";
+import styles from '@/styles/register.module.css';
+
+export default function RegisterPage() {
+  return (
+    <Container className={styles.registerContainer}>
+      <Box className={styles.registerCard}>
+        <Typography variant="h4" className={styles.registerTitle}>
+          Register
+        </Typography>
+        <RegisterForm />
+      </Box>
+    </Container>
+  )
+}
+// File: styles/chatinterface.module.css
+.pageContainer {
+  display: flex;
+  height: 100vh;
+}
+
+.chatContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-width: calc(100% - 300px);
+  padding: 1rem;
+  margin: 0 auto;
+  border: none;
+}
+
+.chatHeader {
+  color: black;
+  text-align: center;
+  margin-bottom: auto;
+}
+
+.chatSubHeader {
+  color: rgb(78, 75, 75);
+  padding: 1 rem;
+  text-align: center;
+  margin-bottom: auto;
+}
+
+.chatMessages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1 rem;
+}
+
+.message {
+  max-width: 70%;
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+  justify-content: flex-end;
+}
+
+.user {
+  color: black;
+  align-self: flex-end;
+  margin-left: auto;
+  padding: 10px;
+}
+
+.ai {
+  color: black;
+  align-self: flex-start;
+}
+
+.chatInputArea {
+  display: flex;
+  padding: 1.5rem;
+  border-top: 1px solid #ccc;
+  border-radius: 15px;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  -ms-border-radius: 15px;
+  -o-border-radius: 15px;
+  margin-right: 1rem;
+  outline: none;
+  align-items: center;
+  position: sticky;
+  z-index: 1000;
+  bottom: 0;
+}
+
+.sendButton {
+  padding: 0.5rem 1rem;
+  background-color: #585757;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  -ms-border-radius: 15px;
+  -o-border-radius: 15px;
+  cursor: pointer;
+}
+
+.sendButton:hover {
+  background-color: #4d4d4d;
+}
+
+/* Spinner styles */
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top: 4px solid #333;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+  margin: 1rem auto; /* Center the spinner */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+// File: styles/globals.css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --card-background: rgba(255, 255, 255, 0.7);
+  --button-gradient: linear-gradient(45deg, #fe6b8b 30%, #ff8e53 90%);
+  --text-primary: #333;
+  --text-secondary: #3f51b5;
+  --error-color: #f44336;
+}
+
+body {
+  font-family: 'Arial', 'Helvetica', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+// File: styles/login.module.css
+.loginContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--primary-gradient);
+}
+
+.loginCard {
+  background: var(--card-background);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  width: 100%;
+  max-width: 400px;
+}
+
+.loginTitle {
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.submitButton {
+  margin-top: 1rem !important;
+  background: var(--button-gradient) !important;
+  border: 0;
+  border-radius: 3px;
+  box-shadow: 0 3px 5px 2px rgba(255, 105, 135, 0.3);
+  color: white;
+  height: 48px;
+  padding: 0 30px;
+  transition: all 0.3s ease-in-out !important;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.submitButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px 4px rgba(255, 105, 135, 0.3);
+}
+
+.errorMessage {
+  color: var(--error-color);
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.registerLink {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.registerLink a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.registerLink a:hover {
+  text-decoration: underline;
+}
+
+
+
+/* RESPONSIVE ADJUSTMENTS */
+@media (max-width: 600px) {
+  .loginCard {
+    width: 90%;
+    padding: 1.5rem;
+  }
+}
+// File: styles/page.module.css
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #f8f9fa;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.getStartedBtn {
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  -webkit-transition: background-color 0.3s ease;
+  -moz-transition: background-color 0.3s ease;
+  -ms-transition: background-color 0.3s ease;
+  -o-transition: background-color 0.3s ease;
+}
+
+.getStartedBtn:hover {
+  background-color: #0056b3;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.description {
+  font-size: 1.2rem;
+  color: #666;
+  max-width: 800px;
+  margin-bottom: 2rem;
+}
+
+.features {
+  display: flex;
+  justify-content: space-around;
+  gap: 2rem;
+  margin-top: 200px;
+}
+
+.feature {
+  max-width: 300px;
+}
+
+.feature h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.feature p {
+  font-size: 1rem;
+  color: #666;
+}
+
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .nav {
+    padding: 1rem;
+  }
+
+  .features {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+// File: styles/register.module.css
+.registerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--primary-gradient);
+}
+
+.registerCard {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  width: 100%;
+  max-width: 400px;
+  -webkit-border-radius: 16px;
+  -moz-border-radius: 16px;
+  -ms-border-radius: 16px;
+  -o-border-radius: 16px;
+}
+
+.registerTitle {
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+.registerForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.submitButton {
+  margin-top: 1.5rem !important;
+  background: var(--button-gradient) !important;
+  border: 0;
+  border-radius: 3px;
+  box-shadow: 0 3px 5px 2px rgba(255, 105, 135, 0.3);
+  color: white;
+  height: 48px;
+  padding: 0 30px;
+  transition: all 0.3s ease-in-out !important;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.submitButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px 4px rgba(255, 105, 135, 0.3);
+}
+
+.errorMessage {
+  color: var(--error-color);
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.loginLink {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.loginLink a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.loginLink a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .registerCard {
+    width: 90%;
+    padding: 1.5rem;
+  }
+}
+// File: styles/sidebar.module.css
+.sidebar {
+  height: 100vh;
+  width: 300px;
+  background-color: #f1f1f1;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid #ccc;
+}
+
+.sidebarContent {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  gap: 1rem;
+}
+
+.newChatButton {
+  padding: 0.5rem 1rem;
+  background-color: #a6a0a0;
+  border: none;
+  border-radius: 4px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.newChatButton:hover {
+  background-color: #8c8c8c;
+}
+
+.chatList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+}
+
+.chatItem {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+}
+
+.chatItem:hover {
+  background-color: #e8e8e8;
+}
+
+.chatItem.active {
+  background-color: #e8e8e8;
+}
+
+.logoutButton {
+  padding: 0.5rem 1rem;
+  background-color: #d95;
+  border: none;
+  border-radius: 4px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  align-self: flex-end;
+}
+
+.logoutButton:hover {
+  background-color: rgb(184, 144, 66);
+}
+// File: utils/apiHelpers.js
+
+// File: utils/authHelpers.js
+
+// File: utils/chatbot.js
+const BACKEND_URL = process.env.BACKEND_URL === 'production' ? process.env.NEXT_PUBLIC_AI_BACKEND_URL : 'http://localhost:3001';
+
+export async function generateResponse(message, conversationHistory) {
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/chat`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ message, conversationHistory }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to generate response");
+    }
+
+    const data = await response.json();
+    return data.response;
+  } catch (error) {
+    console.error("Error generating response:", error);
+    throw new Error("Failed to generate response. Please try again later.");
+  }
+}
+// File: hooks/useAuth.js
+
+// File: hooks/useChat.js
+

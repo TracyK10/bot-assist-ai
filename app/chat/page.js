@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState, useEffect, useRef } from "react";
 import styles from "@/styles/chatinterface.module.css";
@@ -12,7 +12,6 @@ export default function ChatInterface() {
   const [chatHistory, setChatHistory] = useState([
     { id: 1, title: "Previous Chat 1" },
     { id: 2, title: "Previous Chat 2" },
-    // More chat history
   ]);
   const [activeChat, setActiveChat] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -21,10 +20,12 @@ export default function ChatInterface() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, isLoading]);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   const handleSendMessage = async (e) => {
@@ -52,7 +53,7 @@ export default function ChatInterface() {
   };
 
   const startNewChat = () => {
-    const newChatId = Date.now(); //Timestamp as unique id
+    const newChatId = Date.now();
     setChatHistory([
       ...chatHistory,
       { id: newChatId, title: `Chat ${newChatId}` },
@@ -63,23 +64,10 @@ export default function ChatInterface() {
 
   const selectChat = (chatId) => {
     setActiveChat(chatId);
-    // Load chat messages from backend
-    // Clear the message
     setMessages([]);
   };
 
   const renderMessage = (message, index) => {
-    if (message.sender === "ai" && isLoading && index === messages.length - 1) {
-      return (
-        <div className={`${styles.message} ${styles.ai}`} key={index}>
-          <Typography variant="body1">
-            <Skeleton width="100%" />
-            <Skeleton width="80%" />
-            <Skeleton width="60%" />
-          </Typography>
-        </div>
-      );
-    }
     return (
       <div
         className={`${styles.message} ${styles[message.sender]}`}
@@ -111,6 +99,15 @@ export default function ChatInterface() {
               {renderMessage(message, index)}
             </React.Fragment>
           ))}
+          {isLoading && (
+            <div className={`${styles.message} ${styles.ai}`}>
+              <Typography variant="body1">
+                <Skeleton width="100%" />
+                <Skeleton width="80%" />
+                <Skeleton width="60%" />
+              </Typography>
+            </div>
+          )}
           {error && (
             <div className={`${styles.message} ${styles.error}`}>
               {typeof error === "string"
