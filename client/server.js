@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { VertexAI } = require('@google-cloud/vertex-ai');
+const { VertexAI } = require('@google-cloud/vertexai');
 
 
 /* INITIALIZATION */
