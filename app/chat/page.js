@@ -88,6 +88,15 @@ export default function ChatInterface() {
               {message.text}
             </div>
           ))}
+          {isLoading && (
+            <div className={`${styles.message} ${styles.loading}`}>
+              Thinking...
+            </div>
+          )}
+          {error && (
+            <div className={`${styles.message} ${styles.error}`}>{error}</div>
+          )}
+          <div ref={messagesEndRef} />
         </div>
         <form onSubmit={handleSendMessage} className={styles.chatInputArea}>
           <input
@@ -97,7 +106,7 @@ export default function ChatInterface() {
             placeholder="Ask AI..."
             className={styles.chatInput}
           />
-          <button type="submit" className={styles.sendButton}>
+          <button type="submit" className={styles.sendButton} disabled={isLoading}>
             Send
           </button>
         </form>
