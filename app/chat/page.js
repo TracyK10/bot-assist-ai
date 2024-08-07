@@ -38,10 +38,13 @@ export default function ChatInterface() {
 
       try {
         const botResponse = await generateResponse(inputMessage, messages);
-        setMessages((prevMessages) => [...prevMessages, { text: botResponse, sender: "ai" }]);
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { text: botResponse, sender: "ai" },
+        ]);
       } catch (error) {
         console.error("Error:", error);
-        setError("Failed to get a response from the AI");
+        setError(error.message || "Failed to get a response from the AI");
       } finally {
         setIsLoading(false);
       }
@@ -68,7 +71,7 @@ export default function ChatInterface() {
   const renderMessage = (message, index) => {
     if (message.sender === "ai" && isLoading && index === messages.length - 1) {
       return (
-        <div className={`${styles.message} ${styles.ai}`}>
+        <div className={`${styles.message} ${styles.ai}`} key={index}>
           <Typography variant="body1">
             <Skeleton width="100%" />
             <Skeleton width="80%" />
@@ -78,7 +81,10 @@ export default function ChatInterface() {
       );
     }
     return (
-      <div className={`${styles.message} ${styles[message.sender]}`}>
+      <div
+        className={`${styles.message} ${styles[message.sender]}`}
+        key={index}
+      >
         {message.text}
       </div>
     );
@@ -106,7 +112,11 @@ export default function ChatInterface() {
             </React.Fragment>
           ))}
           {error && (
-            <div className={`${styles.message} ${styles.error}`}>{error}</div>
+            <div className={`${styles.message} ${styles.error}`}>
+              {typeof error === "string"
+                ? error
+                : error.message || "An error occurred"}
+            </div>
           )}
           <div ref={messagesEndRef} />
         </div>
@@ -119,7 +129,11 @@ export default function ChatInterface() {
             className={styles.chatInput}
             disabled={isLoading}
           />
-          <button type="submit" className={styles.sendButton} disabled={isLoading}>
+          <button
+            type="submit"
+            className={styles.sendButton}
+            disabled={isLoading}
+          >
             Send
           </button>
         </form>

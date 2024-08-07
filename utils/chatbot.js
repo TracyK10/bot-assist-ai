@@ -18,6 +18,6 @@ export async function generateResponse(message, conversationHistory) {
     return data.response;
   } catch (error) {
     console.error("Error generating response:", error);
-    return { error: "Failed to generate response. Please try again." };
+    throw new Error("Failed to generate response. Please try again later.");
   }
 }

@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const { GoogleAuth } = require('google-auth-library');
 const { VertexAI } = require('@google-cloud/vertexai');
 
 
@@ -9,8 +10,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-/* ROUTES */
+/* Check if GOOGLE_CLOUD_PROJECT_ID is set */
 const projectId = process.env.GOOGLE_CLOUD_PROJECT_ID;
+if (!projectId) {
+  console.error('Error: GOOGLE_CLOUD_PROJECT_ID environment variable is not set.');
+  process.exit(1); // Exit the process with an error code
+}
+
+/* ROUTES */
 const location = 'us-central1';
 const vertexAI = new VertexAI({ project: projectId, location: location });
 const generativeModel = vertexAI.getGenerativeModel({
