@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import styles from "@/styles/chatinterface.module.css";
 import Sidebar from "@/components/SideBar.js";
 import { generateResponse } from "@/utils/chatbot";
+import { Typography, Skeleton } from "@mui/material";
 
 export default function ChatInterface() {
   const [messages, setMessages] = useState([]);
@@ -64,6 +65,25 @@ export default function ChatInterface() {
     setMessages([]);
   };
 
+  const renderMessage = (message, index) => {
+    if (message.sender === "ai" && isLoading && index === messages.length - 1) {
+      return (
+        <div className={`${styles.message} ${styles.ai}`}>
+          <Typography variant="body1">
+            <Skeleton width="100%" />
+            <Skeleton width="80%" />
+            <Skeleton width="60%" />
+          </Typography>
+        </div>
+      );
+    }
+    return (
+      <div className={`${styles.message} ${styles[message.sender]}`}>
+        {message.text}
+      </div>
+    );
+  };
+
   return (
     <div className={styles.pageContainer}>
       <Sidebar
@@ -105,6 +125,7 @@ export default function ChatInterface() {
             onChange={(e) => setInputMessage(e.target.value)}
             placeholder="Ask AI..."
             className={styles.chatInput}
+            disabled={isLoading}
           />
           <button type="submit" className={styles.sendButton} disabled={isLoading}>
             Send
