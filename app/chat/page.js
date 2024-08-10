@@ -62,9 +62,17 @@ export default function ChatInterface() {
     setMessages([]);
   };
 
-  const selectChat = (chatId) => {
+  const selectChat = async (chatId) => {
     setActiveChat(chatId);
     setMessages([]);
+    try {
+      const response = await fetch(`/api/chat/${chatId}/messages`);
+      const data = await response.json();
+      setMessages(data.messages);
+    } catch (error) {
+      console.error("Error loading chat messages", error);
+      setError(error.message || "Failed to load chat history");
+    }
   };
 
   const renderMessage = (message, index) => {
