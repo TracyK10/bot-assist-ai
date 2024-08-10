@@ -15,7 +15,7 @@ AI-powered customer support chatbot built with Next.js and the VertexAI API. Thi
 
 ## Features
 
-- **AI-Powered Responses**: Utilizes OpenAI's GPT-3 to generate intelligent and context-aware responses.
+- **AI-Powered Responses**: Utilizes Vertex AI to generate intelligent and context-aware responses.
 - **Multi-Language Support**: Supports translation of messages to and from multiple languages.
 - **Seamless Integration**: Built with Next.js for easy integration into web applications.
 - **Conversation History**: Maintains conversation history for context-aware interactions.
@@ -25,7 +25,7 @@ AI-powered customer support chatbot built with Next.js and the VertexAI API. Thi
 
 1. **Clone the repository**:
     ```bash
-    git clone https://github.com/yourusername/bot-assist-ai.git
+    git clone https://github.com/addymwenda12/bot-assist-ai.git
     cd bot-assist-ai
     ```
 
