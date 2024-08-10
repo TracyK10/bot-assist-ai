@@ -1,10 +1,10 @@
 # Bot-Assist-AI
 
-AI-powered customer support chatbot built with Next.js and the OpenAI API. This project leverages the power of artificial intelligence to provide efficient, responsive, and intelligent customer support, enhancing user experience and reducing manual support workload.
+AI-powered customer support chatbot built with Next.js and the VertexAI API. This project leverages the power of artificial intelligence to provide efficient, responsive, and intelligent customer support, enhancing user experience and reducing manual support workload.
 
 ## Table of Contents
 
-- [Features](Features)
+- Features
 - Installation
 - Usage
 - Configuration
