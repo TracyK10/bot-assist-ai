@@ -37,7 +37,6 @@ AI-powered customer support chatbot built with Next.js and the VertexAI API. Thi
 3. **Set up environment variables**:
     Create a [`.env.local`](command:_github.copilot.openRelativePath?%5B%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2Fc%3A%2FUsers%2FYang%20Munene%2FDesktop%2FMotileTech%2Fbot-assist-ai%2F.env.local%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%5D "c:\Users\Yang Munene\Desktop\MotileTech\bot-assist-ai\.env.local") file in the root directory and add your OpenAI API key and other necessary configurations:
     ```env
-    OPENAI_API_KEY=your_openai_api_key
     NEXT_PUBLIC_BACKEND_URL=http://localhost:3000
     GOOGLE_CLOUD_PROJECT_ID=your_google_cloud_project_id
     ```
