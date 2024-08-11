@@ -1,7 +1,7 @@
 .pageContainer {
     display: flex;
     height: 100vh;
-    justify-content: flex-start; /* Ensure sidebar and chat container are aligned */
+    justify-content: flex-start;
 }
 
 .chatContainer {
@@ -9,7 +9,7 @@
     flex-direction: column;
     height: 100vh;
     padding: 1rem;
-    margin-left: 240px; /* Adjust if needed to accommodate sidebar */
+    margin-left: 240px;
     border: none;
     flex: 1;
     position: relative;
@@ -32,8 +32,8 @@
     position: fixed;
     bottom: 0;
     left: 0;
-    width: calc(100% - 240px); /* Adjust to match sidebar width */
-    z-index: 10; /* Ensure it's above other elements */
+    width: calc(100% - 240px);
+    z-index: 10;
 }
 
 .sendButton {
@@ -51,5 +51,5 @@
 
 .sidebarContent {
     position: relative;
-    z-index: 1; /* Ensure it’s behind the chat area */
+    z-index: 1;
 }

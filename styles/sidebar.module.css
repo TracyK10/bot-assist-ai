@@ -3,10 +3,10 @@
     top: 0;
     left: 0;
     height: 100%;
-    width: 240px; /* Adjust according to your design */
+    width: 240px;
     background-color: #333;
     color: white;
-    z-index: 1; /* Ensure it’s below the chat area */
+    z-index: 1;
 }
 
 .sidebarContent {
