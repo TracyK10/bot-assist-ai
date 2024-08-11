@@ -4,7 +4,7 @@
 
 :root {
     --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --card-background: rgba(255, 255, 255, 0.7);
+    --card-background: rgba(200, 200, 200, 0.9);
     --button-gradient: linear-gradient(45deg, #fe6b8b 30%, #ff8e53 90%);
     --text-primary: #333;
     --text-secondary: #3f51b5;
