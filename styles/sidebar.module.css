@@ -1,77 +1,80 @@
 .sidebar {
-  height: 100vh;
-  width: 300px;
-  background-color: #f1f1f1;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border-right: 1px solid #ccc;
+    height: 100vh;
+    width: 300px;
+    background-color: #f1f1f1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-right: 1px solid #ccc;
 }
 
 .sidebarContent {
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    gap: 1rem;
 }
 
 .newChatButton {
-  padding: 0.5rem 1rem;
-  background-color: #a6a0a0;
-  border: none;
-  border-radius: 4px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -o-border-radius: 5px;
-  cursor: pointer;
-  margin-bottom: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #a6a0a0;
+    border: none;
+    border-radius: 4px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 1rem;
 }
 
 .newChatButton:hover {
-  background-color: #8c8c8c;
+    background-color: #8c8c8c;
 }
 
 .chatList {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    overflow-y: auto;
 }
 
 .chatItem {
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  border-radius: 4px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  -ms-border-radius: 4px;
-  -o-border-radius: 4px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
 }
 
 .chatItem:hover {
-  background-color: #e8e8e8;
+    background-color: #e8e8e8;
+    color: black;
 }
 
 .chatItem.active {
-  background-color: #e8e8e8;
+    background-color: #e8e8e8;
+    color: black;
 }
 
 .logoutButton {
-  padding: 0.5rem 1rem;
-  background-color: #d95;
-  border: none;
-  border-radius: 4px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -o-border-radius: 5px;
-  cursor: pointer;
-  width: 100%;
-  align-self: flex-end;
+    padding: 0.5rem 1rem;
+    background-color: #d95;
+    border: none;
+    border-radius: 4px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    align-self: flex-end;
+    margin-top: 1rem;
 }
 
 .logoutButton:hover {
-  background-color: rgb(184, 144, 66);
+    background-color: rgb(184, 144, 66);
 }

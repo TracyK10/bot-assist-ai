@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import styles from "@/styles/chatinterface.module.css";
@@ -32,7 +32,7 @@ export default function ChatInterface() {
   const extractChatTitle = (message) => {
     // Extract a meaningful title from the message
     return message.split(" ").slice(0, 3).join(" ");
-  }
+  };
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -42,25 +42,29 @@ export default function ChatInterface() {
       setInputMessage("");
       setIsLoading(true);
       setError(null);
-  
+
       try {
         const botResponse = await generateResponse(inputMessage, messages);
         const aiMessage = { text: botResponse, sender: "ai" };
         setMessages((prevMessages) => [...prevMessages, aiMessage]);
-  
+
         if (activeChat === null || activeChat === undefined) {
           console.error("activeChat is null or undefined");
           return;
         }
-  
+
         await saveMessage(activeChat, userMessage);
         await saveMessage(activeChat, aiMessage);
-  
+
         // Rename chat based on the first user message
         if (messages.length === 0) {
           const newTitle = extractChatTitle(userMessage.text);
           await renameChat(activeChat, newTitle);
-          setChatHistory(chatHistory.map(chat => chat.id === activeChat ? { ...chat, title: newTitle } : chat));
+          setChatHistory(
+            chatHistory.map((chat) =>
+              chat.id === activeChat ? { ...chat, title: newTitle } : chat,
+            ),
+          );
         }
       } catch (error) {
         console.error("Error:", error);
@@ -100,7 +104,11 @@ export default function ChatInterface() {
     }
     return (
       <div
-        className={`${styles.message} ${styles[message.sender]}`}
+        className={`max-w-[70%] rounded-xl px-4 py-2 mb-4 ${
+          message.sender === "user"
+            ? "bg-blue-500 text-white self-end"
+            : "bg-gray-600 text-black self-start"
+        }`}
         key={index}
       >
         {message.text}
@@ -117,11 +125,11 @@ export default function ChatInterface() {
         OnChatSelect={selectChat}
       />
       <div className={styles.chatContainer}>
-        <div className={styles.chatHeader}>
-          <h1>Talk Data to me</h1>
-        </div>
-        <div className={styles.chatSubHeader}>
-          <p>Ask me a question to get your full support</p>
+        <div className="text-center mt-10">
+          <h1 className="text-3xl font-semibold">Feel free to chat with me</h1>
+          <p className="text-xl text-gray-600">
+            Ask me a question to get your full support
+          </p>
         </div>
         <div className={styles.chatMessages}>
           {messages.map((message, index) => (
@@ -147,13 +155,16 @@ export default function ChatInterface() {
           )}
           <div ref={messagesEndRef} />
         </div>
-        <form onSubmit={handleSendMessage} className={styles.chatInputArea}>
+        <form
+          onSubmit={handleSendMessage}
+          className="flex items-center p-4 border rounded-full  border-gray-500 bg-white fixed bottom-0 w-3/4 right-0 mx-16 my-5"
+        >
           <input
             type="text"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             placeholder="Ask AI..."
-            className={styles.chatInput}
+            className="flex-1 p-2 border rounded-full mr-2 border-gray-300"
             disabled={isLoading}
           />
           <button
