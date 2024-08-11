@@ -1,7 +1,7 @@
 .pageContainer {
     display: flex;
     height: 100vh;
-    justify-content: space-between;
+    justify-content: flex-start; /* Ensure sidebar and chat container are aligned */
 }
 
 .chatContainer {
@@ -9,22 +9,10 @@
     flex-direction: column;
     height: 100vh;
     padding: 1rem;
-    margin: 0 auto;
+    margin-left: 240px; /* Adjust if needed to accommodate sidebar */
     border: none;
     flex: 1;
-}
-
-.chatHeader {
-    color: black;
-    text-align: center;
-    margin-bottom: auto;
-}
-
-.chatSubHeader {
-    color: rgb(78, 75, 75);
-    padding: 1rem;
-    text-align: center;
-    margin-bottom: auto;
+    position: relative;
 }
 
 .chatMessages {
@@ -33,31 +21,7 @@
     padding: 1rem;
     display: flex;
     flex-direction: column;
-}
-
-.message {
-    max-width: 70%;
-    border-radius: 20px;
-    padding: 0.5rem 1rem;
-    margin-bottom: 1rem;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    word-break: break-word;
-}
-
-.user {
-    color: black;
-    align-self: flex-end;
-    margin-left: auto;
-    padding: 10px;
-    background-color: #d1e7dd;
-}
-
-.ai {
-    color: black;
-    align-self: flex-start;
-    padding: 10px;
-    background-color: #f8d7da;
+    position: relative;
 }
 
 .chatInputArea {
@@ -65,12 +29,11 @@
     padding: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 15px;
-    margin-right: 1rem;
-    outline: none;
-    align-items: center;
-    position: sticky;
-    z-index: 1000;
+    position: fixed;
     bottom: 0;
+    left: 0;
+    width: calc(100% - 240px); /* Adjust to match sidebar width */
+    z-index: 10; /* Ensure it's above other elements */
 }
 
 .sendButton {
@@ -86,9 +49,7 @@
     background-color: #4d4d4d;
 }
 
-.typingIndicator {
-    font-style: italic;
-    color: #aaa;
-    padding: 0.5rem;
-    text-align: center;
+.sidebarContent {
+    position: relative;
+    z-index: 1; /* Ensure it’s behind the chat area */
 }
