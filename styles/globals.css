@@ -16,7 +16,7 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background: linear-gradient(to bottom, grey, white);
+    background: linear-gradient(to bottom, #244855, #ADBBDA, #EDE8F5);
 }
 
 @layer utilities {
