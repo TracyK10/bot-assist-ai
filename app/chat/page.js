@@ -5,6 +5,7 @@ import styles from "@/styles/chatinterface.module.css";
 import Sidebar from "@/components/SideBar.js";
 import { generateResponse } from "@/utils/chatbot";
 import { Typography, Skeleton } from "@mui/material";
+import { saveChat, saveMessage, renameChat } from "@/client/utils/chatbot";
 
 export default function ChatInterface() {
   const [messages, setMessages] = useState([]);
@@ -28,6 +29,11 @@ export default function ChatInterface() {
     }
   };
 
+  const extractChatTitle = (message) => {
+    // Extract a meaningful title from the message
+    return message.split(" ").slice(0, 3).join(" ");
+  }
+
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (inputMessage.trim() !== "") {
@@ -36,13 +42,26 @@ export default function ChatInterface() {
       setInputMessage("");
       setIsLoading(true);
       setError(null);
-
+  
       try {
         const botResponse = await generateResponse(inputMessage, messages);
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { text: botResponse, sender: "ai" },
-        ]);
+        const aiMessage = { text: botResponse, sender: "ai" };
+        setMessages((prevMessages) => [...prevMessages, aiMessage]);
+  
+        if (activeChat === null || activeChat === undefined) {
+          console.error("activeChat is null or undefined");
+          return;
+        }
+  
+        await saveMessage(activeChat, userMessage);
+        await saveMessage(activeChat, aiMessage);
+  
+        // Rename chat based on the first user message
+        if (messages.length === 0) {
+          const newTitle = extractChatTitle(userMessage.text);
+          await renameChat(activeChat, newTitle);
+          setChatHistory(chatHistory.map(chat => chat.id === activeChat ? { ...chat, title: newTitle } : chat));
+        }
       } catch (error) {
         console.error("Error:", error);
         setError(error.message || "Failed to get a response from the AI");
@@ -52,30 +71,33 @@ export default function ChatInterface() {
     }
   };
 
-  const startNewChat = () => {
+  const startNewChat = async () => {
     const newChatId = Date.now();
-    setChatHistory([
-      ...chatHistory,
-      { id: newChatId, title: `Chat ${newChatId}` },
-    ]);
+    const newChat = { id: newChatId, title: `Chat ${newChatId}` };
+    setChatHistory([...chatHistory, newChat]);
     setActiveChat(newChatId);
     setMessages([]);
+    await saveChat(newChat);
   };
 
-  const selectChat = async (chatId) => {
+  const selectChat = (chatId) => {
+    if (chatId === null || chatId === undefined) {
+      console.error("chatId is null or undefined");
+      return;
+    }
     setActiveChat(chatId);
     setMessages([]);
-    try {
-      const response = await fetch(`/api/chat/${chatId}/messages`);
-      const data = await response.json();
-      setMessages(data.messages);
-    } catch (error) {
-      console.error("Error loading chat messages", error);
-      setError(error.message || "Failed to load chat history");
-    }
   };
 
   const renderMessage = (message, index) => {
+    if (message === null || message === undefined) {
+      console.error("message is null or undefined");
+      return null;
+    }
+    if (message.sender === null || message.sender === undefined) {
+      console.error("message.sender is null or undefined");
+      return null;
+    }
     return (
       <div
         className={`${styles.message} ${styles[message.sender]}`}
