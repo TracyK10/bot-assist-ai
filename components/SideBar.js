@@ -14,7 +14,7 @@ const Sidebar = ({ chatHistory, activeChatId, OnNewChat, OnChatSelect }) => {
   };
 
   return (
-    <div className={styles.sidebar}>
+    <div className="fixed top-0 left-0 h-full w-60 bg-gray-800 text-white p-4 md:p-6 lg:p-10">
       <div className={styles.sidebarContent}>
         <button onClick={OnNewChat} className={styles.newChatButton}>
           New Chat

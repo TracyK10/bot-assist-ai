@@ -32,54 +32,62 @@ export default function LoginForm() {
   };
 
   return (
-    <Container className={styles.LoginContainer}>
-      <Box className={styles.loginCard}>
-        <Typography variant="h4" className={styles.loginTitle}>
-          Login
-        </Typography>
-        <form onSubmit={handleSubmit} className={styles.loginForm}>
-          <TextField
-            label="Email"
-            type="email"
-            fullWidth
-            variant="outlined"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <TextField
-            label="Password"
-            type="password"
-            fullWidth
-            variant="outlined"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          {error && (
-            <Typography className={styles.errorMessage}>{error}</Typography>
-          )}
-          <Button
-            type="submit"
-            variant="contained"
-            fullWidth
-            className={styles.submitButton}
-          >
-            Login
-          </Button>
-          <Button
-          onClick={handleGoogleSignIn}
-          variant="contained"
-          fullWidth
-          className={styles.googleButton}
-        >
-          Login with Google
-        </Button>
-        </form>
-        <Typography className={styles.registerLink}>
-          Do not have an account? <Link href="/register">Register</Link>
-        </Typography>
-      </Box>
-    </Container>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        p: 1,
+      }}
+    >
+      <div className="w-96">
+        <Box className={styles.loginCard}>
+          <form onSubmit={handleSubmit} className={styles.loginForm}>
+            <TextField
+              label="Email"
+              type="email"
+              fullWidth
+              variant="outlined"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              sx={{ borderRadius: "25px" }}
+            />
+            <TextField
+              label="Password"
+              type="password"
+              fullWidth
+              variant="outlined"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            {error && (
+              <Typography className={styles.errorMessage}>{error}</Typography>
+            )}
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              className={styles.submitButton}
+            >
+              Login
+            </Button>
+            <Button
+              onClick={handleGoogleSignIn}
+              variant="contained"
+              fullWidth
+              className={styles.googleButton}
+            >
+              Login with Google
+            </Button>
+          </form>
+          <Typography className={styles.registerLink}>
+            Do not have an account? <Link href="/register">Register</Link>
+          </Typography>
+        </Box>
+      </div>
+    </Box>
   );
 }
