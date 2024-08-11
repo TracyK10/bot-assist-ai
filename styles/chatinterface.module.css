@@ -51,5 +51,5 @@
 
 .sidebarContent {
     position: relative;
-    z-index: 1; /* Ensure it’s behind the chat area */
+    z-index: 1;
 }
